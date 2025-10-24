@@ -1,29 +1,22 @@
-// config.js
-
-require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
+require('dotenv').config(); // Lembre de instalar: npm install dotenv
 
 module.exports = {
-  // Bloco de configuração para o ambiente de Desenvolvimento
-  development: {
-    dialect: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    database: 'aeroporto', // Verifique se o nome do seu banco é este
-    username: 'postgres',      // SUBSTITUA PELO SEU USUÁRIO
-    password: 'vito', // SUBSTITUA PELA SUA SENHA
-    logging: false,
+  // O Sequelize vai usar a DATABASE_URL se ela existir no ambiente da nuvem
+  url: process.env.DATABASE_URL, 
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false // Necessário para conexões SSL em muitos serviços de nuvem
+    }
   },
-
-  // Bloco de configuração para o ambiente de Produção
-  production: {
-    dialect: 'postgres',
-    url: process.env.DATABASE_URL, 
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    },
-    logging: false,
+  // As configurações abaixo serão usadas apenas se a URL não for encontrada (ambiente local)
+  host: 'localhost',
+  username: 'postgres',
+  password: 'vito',
+  database: 'aeroporto',
+  define: {
+    timestamps: true,
+    underscored: true,
   },
 };
