@@ -8,14 +8,14 @@ const app = express();
 const PORT = process.env.PORT || 3008;
 const env = process.env.NODE_ENV || 'development';
 
-// --- INÍCIO DA CORREÇÃO ---
+
 
 // 1. Defina as URLs que podem acessar sua API
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001', 
     /\.vercel\.app$/,
-    '*' // Temporariamente permite todas as origens para debug
+    '*' 
 ];
 
 // 2. Configure o CORS (temporariamente permissivo para debug)
@@ -48,10 +48,6 @@ app.get('/', (req, res) => {
 });
 
 
-// 5. SINCRONIZAÇÃO E INICIALIZAÇÃO
-// AVISO: { alter: true } pode ser perigoso em produção. 
-// Considere usar Migrations (como o Sequelize-CLI) para um controle seguro
-// do banco de dados em produção.
 db.sequelize.sync({ alter: true })
     .then(() => {
         app.listen(PORT, () => {
