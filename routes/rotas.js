@@ -1,16 +1,14 @@
-// src/routes/rotas.js (BACKEND)
-
 const express = require('express');
 const router = express.Router();
 
 // Importe TODOS os arquivos de rota
 const rotasAviao = require('./rotasAviao'); 
-const rotasPassageiro = require('./rotasPassageiro'); // <-- ADICIONAR
-const rotasVoo = require('./rotasVoo');             // <-- ADICIONAR
+const rotasPassageiro = require('./rotasPassageiro'); // <-- Faltando no seu repo
+const rotasVoo = require('./rotasVoo');             // <-- Faltando no seu repo
 
-// Agrupe TODAS as rotas sob o prefixo /api
+// Agrupe TODAS as rotas
 router.use('/avioes', rotasAviao);
-router.use('/passageiros', rotasPassageiro); // <-- ADICIONAR
-router.use('/voos', rotasVoo);             // <-- ADICIONAR
+router.use('/passageiros', rotasPassageiro); // <-- Faltando no seu repo
+router.use('/voos', rotasVoo);             // <-- Faltando no seu repo
 
 module.exports = router;

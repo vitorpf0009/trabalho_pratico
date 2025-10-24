@@ -1,72 +1,45 @@
- 
-const db = require('../entities');
+// src/controllers/VooController.js
 
- // POST /voos
-exports.create = async (req, res) => {
-  try {
-    const novoVoo = await db.Voo.create(req.body);
-    res.status(201).json(novoVoo);
-  } catch (err) {
-    console.error('Erro ao criar voo:', err);
-    res.status(500).json({ error: 'Erro ao criar voo', detalhes: err.message });
-  }
+const VooUseCases = require('../usecases/VooUseCases');
+
+const VooController = {
+    async create(req, res) {
+        try {
+            const resultado = await VooUseCases.criarVoo(req.body);
+            return res.status(201).json(resultado);
+        } catch (error) {
+            return res.status(400).json({ status: 'error', message: error.message });
+        }
+    },
+
+    async findAll(req, res) {
+        try {
+            const lista = await VooUseCases.listarVoos();
+            return res.status(200).json(lista);
+        } catch (error) {
+            return res.status(500).json({ status: 'error', message: error.message });
+        }
+    },
+
+    async update(req, res) {
+        try {
+            const resultado = await VooUseCases.atualizarVoo(req.params.id, req.body);
+            return res.status(200).json(resultado);
+        } catch (error) {
+            const status = error.message.includes("não encontrado") ? 404 : 400;
+            return res.status(status).json({ status: 'error', message: error.message });
+        }
+    },
+
+    async delete(req, res) {
+        try {
+            const resultado = await VooUseCases.deletarVoo(req.params.id);
+            return res.status(200).json(resultado);
+        } catch (error) {
+            const status = error.message.includes("não encontrado") ? 404 : 500;
+            return res.status(status).json({ status: 'error', message: error.message });
+        }
+    }
 };
 
-    // GET /voos
-exports.findAll = async (req, res) => {
-  try {
-    const voos = await db.Voo.findAll({
-      include: [
-        { model: db.Aviao, as: 'aviao' },
-        { model: db.Passageiro, as: 'passageiro' }
-      ]
-    });
-    res.json(voos);
-  } catch (err) {
-    console.error('Erro ao buscar voos:', err);
-    res.status(500).json({ error: 'Erro ao buscar voos', detalhes: err.message });
-  }
-};
-
- // GET /voos/:id
-exports.findOne = async (req, res) => {
-  try {
-    const voo = await db.Voo.findByPk(req.params.id, {
-      include: [
-        { model: db.Aviao, as: 'aviao' },
-        { model: db.Passageiro, as: 'passageiro' }
-      ]
-    });
-    if (!voo) return res.status(404).json({ error: 'Voo não encontrado' });
-    res.json(voo);
-  } catch (err) {
-    res.status(500).json({ error: 'Erro ao buscar voo', detalhes: err.message });
-  }
-};
-
-   // PUT /Voos/:id
-exports.update = async (req, res) => {
-  try {
-    const [linhasAfetadas] = await db.Voo.update(req.body, {
-      where: { id: req.params.id }
-    });
-    if (!linhasAfetadas) return res.status(404).json({ error: 'Voo não encontrado' });
-    const vooAtualizado = await db.Voo.findByPk(req.params.id);
-    res.json(vooAtualizado);
-  } catch (err) {
-    res.status(500).json({ error: 'Erro ao atualizar voo', detalhes: err.message });
-  }
-};
-
-  // DELETE /Voos/:id
-exports.delete = async (req, res) => {
-  try {
-    const linhasAfetadas = await db.Voo.destroy({
-      where: { id: req.params.id }
-    });
-    if (!linhasAfetadas) return res.status(404).json({ error: 'Voo não encontrado' });
-    res.json({ message: 'Voo excluído com sucesso' });
-  } catch (err) {
-    res.status(500).json({ error: 'Erro ao excluir voo', detalhes: err.message });
-  }
-};
+module.exports = VooController;

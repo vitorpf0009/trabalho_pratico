@@ -42,7 +42,7 @@ const AviaoUseCases = {
     },
 
  
-    async atualizarAviao(id, novosDados) {
+  async atualizarAviao(id, novosDados) {
         try {
             const [linhasAfetadas] = await Aviao.update(novosDados, {
                 where: { id: id }
@@ -51,8 +51,9 @@ const AviaoUseCases = {
             if (linhasAfetadas === 0) {
                 throw new Error("Avião não encontrado para atualização.");
             }
-            // Retorna o avião atualizado
-            return this.buscarAviaoPorId(id);
+            const aviaoAtualizado = await Aviao.findByPk(id);
+            // CORREÇÃO: Retornar o objeto que o frontend espera
+            return { status: 'success', message: 'Avião atualizado com sucesso.', data: aviaoAtualizado };
 
         } catch (error) {
             throw new Error(`Erro ao atualizar avião: ${error.message}`);
