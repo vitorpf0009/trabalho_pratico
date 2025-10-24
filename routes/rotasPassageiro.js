@@ -1,3 +1,5 @@
+// src/routes/rotasPassageiro.js
+
 const express = require('express');
 const router = express.Router();
 const PassageiroController = require('../controllers/PassageiroController');

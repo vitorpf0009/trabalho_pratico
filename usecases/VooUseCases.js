@@ -2,14 +2,14 @@
 
 const db = require('../entities');
 const Voo = db.Voo;
-const Aviao = db.Aviao;         // Importamos Aviao para o join
-const Passageiro = db.Passageiro; // Importamos Passageiro para o join
+const Aviao = db.Aviao;
+const Passageiro = db.Passageiro;
 
 const VooUseCases = {
-
     async criarVoo(dados) {
         try {
             const novoVoo = await Voo.create(dados);
+            // CORREÇÃO: Retornar o objeto de sucesso que o frontend espera
             return { status: 'success', message: 'Voo criado com sucesso!', data: novoVoo };
         } catch (error) {
             throw new Error(`Erro ao criar voo: ${error.message}`);
@@ -18,21 +18,12 @@ const VooUseCases = {
 
     async listarVoos() {
         try {
-            // A parte mais importante: `include` faz o JOIN com as tabelas associadas
             const listaDeVoos = await Voo.findAll({
                 include: [
-                    {
-                        model: Aviao, 
-                        as: 'aviao', // 'as' deve corresponder ao alias definido na associação em entities/index.js
-                        attributes: ['modelo', 'num_registro'] // Traz apenas os campos necessários
-                    },
-                    {
-                        model: Passageiro, 
-                        as: 'passageiro',
-                        attributes: ['nome']
-                    }
+                    { model: Aviao, as: 'aviao', attributes: ['modelo', 'num_registro'] },
+                    { model: Passageiro, as: 'passageiro', attributes: ['nome'] }
                 ],
-                order: [['data_hora_partida', 'DESC']] // Ordena os voos do mais recente para o mais antigo
+                order: [['data_hora_partida', 'DESC']]
             });
             return listaDeVoos;
         } catch (error) {
@@ -47,6 +38,7 @@ const VooUseCases = {
                 throw new Error("Voo não encontrado para atualização.");
             }
             const vooAtualizado = await Voo.findByPk(id);
+            // CORREÇÃO: Retornar o objeto de sucesso que o frontend espera
             return { status: 'success', message: 'Voo atualizado com sucesso.', data: vooAtualizado };
         } catch (error) {
             throw new Error(`Erro ao atualizar voo: ${error.message}`);
@@ -59,7 +51,7 @@ const VooUseCases = {
             if (resultado === 0) {
                 throw new Error("Voo não encontrado para exclusão.");
             }
-            return { status: 'success', message: `Voo ID ${id} excluído com sucesso.` };
+            return { status: 'success', message: `Voo ID ${id} foi excluído.` };
         } catch (error) {
             throw new Error(`Erro ao deletar voo: ${error.message}`);
         }
