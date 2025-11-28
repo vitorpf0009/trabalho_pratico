@@ -7,12 +7,14 @@ const router = express.Router();
 const rotasAviao = require('./rotasAviao'); 
 const rotasPassageiro = require('./rotasPassageiro');
 const rotasVoo = require('./rotasVoo');
+const {login, verificaJWT} = require('../controllers/segurancaController');
 
+router.post('/login', login);
 
-router.use('/avioes', rotasAviao);
+router.use('/avioes', verificaJWT, rotasAviao);
 
-router.use('/passageiros', rotasPassageiro);
+router.use('/passageiros', verificaJWT, rotasPassageiro);
 
-router.use('/voos', rotasVoo);
+router.use('/voos', verificaJWT, rotasVoo);
 
 module.exports = router;
