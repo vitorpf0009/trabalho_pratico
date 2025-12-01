@@ -1,10 +1,35 @@
-class Usuario {
-    constructor(email, tipo, telefone, nome) {
-        this.email = email;
-        this.tipo = tipo;
-        this.telefone = telefone;
-        this.nome = nome;
-    }
-}
+const { DataTypes } = require('sequelize');
 
-module.exports = Usuario; 
+module.exports = (sequelize) => {
+    const Usuario = sequelize.define('Usuario', {
+        email: {
+            type: DataTypes.STRING(50),
+            primaryKey: true,
+            allowNull: false
+        },
+        senha: {
+            type: DataTypes.STRING(20),
+            allowNull: false
+        },
+        tipo: {
+            type: DataTypes.CHAR(1),
+            allowNull: false,
+            validate: {
+                isIn: [['A', 'U']]
+            }
+        },
+        telefone: {
+            type: DataTypes.STRING(14),
+            allowNull: false
+        },
+        nome: {
+            type: DataTypes.STRING(50),
+            allowNull: false
+        }
+    }, {
+        tableName: 'usuarios',
+        timestamps: false
+    });
+
+    return Usuario;
+}; 
