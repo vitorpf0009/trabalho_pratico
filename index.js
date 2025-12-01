@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./entities');
 const rotasAPI = require('./routes/rotas');
+const usuarioRoutes = require('./routes/rotasUsuario');
 const config = require('./config');
 const cors = require('cors'); 
 
@@ -37,8 +38,10 @@ app.use((req, res, next) => {
 // 2. MIDDLEWARES PRINCIPAIS (APÓS O CORS)
 app.use(express.json()); // Habilita o parsing de JSON no corpo da requisição
 
+// ROTA PÚBLICA (SEM AUTENTICAÇÃO)
+app.use('/api/usuarios', usuarioRoutes);
 
-// 3. ROTAS DA API
+// 3. ROTAS DA API (PROTEGIDAS)
 app.use('/api', rotasAPI); // Todas as rotas estarão sob o prefixo /api
 
 
