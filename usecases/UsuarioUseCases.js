@@ -1,5 +1,5 @@
 const db = require('../entities');
-const Usuario = db.Usuario;
+const { Usuario } = db;
 
 const UsuarioUseCases = {
     async criarUsuario(dados) {
