@@ -35,6 +35,7 @@ const db = {};
 db.Aviao = require('./Aviao')(sequelize);
 db.Passageiro = require('./Passageiro')(sequelize);
 db.Voo = require('./Voo')(sequelize);
+db.Usuario = require('./Usuario')(sequelize);
 
 // Definir as associações (relações de chave estrangeira)
 db.Aviao.hasMany(db.Voo, { foreignKey: 'id_aviao', as: 'voos' });
