@@ -14,6 +14,7 @@ module.exports = (sequelize) => {
         tipo: {
             type: DataTypes.CHAR(1),
             allowNull: false,
+            defaultValue: 'U',
             validate: {
                 isIn: [['A', 'U']]
             }
