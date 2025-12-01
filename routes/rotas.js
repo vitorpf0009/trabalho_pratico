@@ -12,12 +12,12 @@ const {login, verificaJWT} = require('../controllers/segurancaController');
 
 router.post('/login', login);
 
+// Rota pública para cadastro de usuários
+router.use('/usuarios', rotasUsuario);
+
+// Rotas protegidas por autenticação
 router.use('/avioes', verificaJWT, rotasAviao);
-
 router.use('/passageiros', verificaJWT, rotasPassageiro);
-
 router.use('/voos', verificaJWT, rotasVoo);
-
-router.use('/usuarios', verificaJWT, rotasUsuario);
 
 module.exports = router;
