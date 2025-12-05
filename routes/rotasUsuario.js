@@ -8,7 +8,7 @@ router.post('/', UsuarioController.create);
 
 // Rotas protegidas
 router.get('/', verificaJWT, UsuarioController.findAll);
-router.put('/:id', verificaJWT, UsuarioController.update);
-router.delete('/:id', verificaJWT, UsuarioController.delete);
+router.put('/:email', verificaJWT, UsuarioController.update);
+router.delete('/:email', verificaJWT, UsuarioController.delete);
 
 module.exports = router;

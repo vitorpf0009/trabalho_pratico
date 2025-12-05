@@ -22,7 +22,7 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const resultado = await UsuarioUseCases.atualizarUsuario(req.params.id, req.body);
+            const resultado = await UsuarioUseCases.atualizarUsuario(req.params.email, req.body);
             return res.status(200).json(resultado);
         } catch (error) {
             const status = error.message.includes("não encontrado") ? 404 : 400;
@@ -32,7 +32,7 @@ module.exports = {
 
     async delete(req, res) {
         try {
-            const resultado = await UsuarioUseCases.deletarUsuario(req.params.id);
+            const resultado = await UsuarioUseCases.deletarUsuario(req.params.email);
             return res.status(200).json(resultado);
         } catch (error) {
             const status = error.message.includes("não encontrado") ? 404 : 409;
