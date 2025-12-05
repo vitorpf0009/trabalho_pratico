@@ -16,24 +16,15 @@ const login = async (request, response) => {
 // verificação do token
 function verificaJWT(request, response, next) {
     const token = request.headers['authorization'];
-    if (!token) {
-        return response.status(401).json({ 
-            auth: false, 
-            message: 'Acesso negado. Token de autenticação obrigatório. Faça login em /api/login para obter o token.' 
-        });
-    }
+    if (!token) return response.status(401).json({ auth: false, message: 'Nenhum token recebido.' });
 
     // Remove 'Bearer ' se presente
     const cleanToken = token.startsWith('Bearer ') ? token.slice(7) : token;
 
     jwt.verify(cleanToken, process.env.SECRET, function (err, decoded) {
-        if (err) {
-            return response.status(401).json({ 
-                auth: false, 
-                message: 'Token inválido ou expirado. Faça login novamente em /api/login.' 
-            });
-        }
+        if (err) return response.status(401).json({ auth: false, message: 'Erro ao autenticar o token.' });
         // Se o token for válido, salva no request para uso posterior
+        console.log("Usuario: " + JSON.stringify(decoded.usuario));
         request.usuario = decoded.usuario;
         next();
     });
