@@ -5,9 +5,6 @@ const {verificaJWT} = require('../controllers/segurancaController');
 
 // Rota pública para criação de usuários
 router.post('/', UsuarioController.create);
-router.get('/', UsuarioController.findAll);
-router.put('/:email', UsuarioController.update);
-router.delete('/:email', UsuarioController.delete);
 
 // Rotas protegidas
 router.get('/', verificaJWT, UsuarioController.findAll);
