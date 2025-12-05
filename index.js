@@ -51,6 +51,17 @@ app.use('/api/usuarios', usuarioRoutes);
 // 3. ROTAS DA API (PROTEGIDAS)
 app.use('/api', rotasAPI); // Todas as rotas estarão sob o prefixo /api
 
+// Middleware para rotas protegidas sem /api
+const rotasProtegidas = ['voos', 'avioes', 'passageiros', 'usuarios', 'perfil', 'login'];
+rotasProtegidas.forEach(rota => {
+    app.use(`/${rota}`, (req, res) => {
+        res.status(401).json({ 
+            auth: false, 
+            message: `Acesso negado. Token de autenticação obrigatório. Use /api/${rota}` 
+        });
+    });
+});
+
 
 // 4. ROTA DE STATUS
 app.get('/', (req, res) => {
