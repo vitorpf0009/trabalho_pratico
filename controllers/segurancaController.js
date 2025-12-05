@@ -24,7 +24,6 @@ function verificaJWT(request, response, next) {
     jwt.verify(cleanToken, process.env.SECRET, function (err, decoded) {
         if (err) return response.status(401).json({ auth: false, message: 'Erro ao autenticar o token.' });
         // Se o token for válido, salva no request para uso posterior
-        console.log("Usuario: " + JSON.stringify(decoded.usuario));
         request.usuario = decoded.usuario;
         next();
     });

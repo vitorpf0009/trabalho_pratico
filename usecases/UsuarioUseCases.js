@@ -15,7 +15,9 @@ const UsuarioUseCases = {
                 dados.tipo = 'A';
             }
             const novo = await Usuario.create(dados);
-            return { status: 'success', message: 'Usuário cadastrado com sucesso!', data: novo };
+            // Remove senha da resposta
+            const { senha, ...usuarioSemSenha } = novo.toJSON();
+            return { status: 'success', message: 'Usuário cadastrado com sucesso!', data: usuarioSemSenha };
         } catch (error) {
             if (error.name === 'SequelizeUniqueConstraintError') {
                 throw new Error(`O email '${dados.email}' já está em uso.`);
@@ -26,7 +28,9 @@ const UsuarioUseCases = {
 
     async listarUsuarios() {
         try {
-            return await Usuario.findAll();
+            return await Usuario.findAll({
+                attributes: { exclude: ['senha'] }
+            });
         } catch (error) {
             throw new Error(`Erro ao buscar usuários: ${error.message}`);
         }
@@ -38,7 +42,9 @@ const UsuarioUseCases = {
             if (linhasAfetadas === 0) {
                 throw new Error("Usuário não encontrado para atualização.");
             }
-            const atualizado = await Usuario.findByPk(email);
+            const atualizado = await Usuario.findByPk(email, {
+                attributes: { exclude: ['senha'] }
+            });
             return { status: 'success', message: 'Usuário atualizado com sucesso.', data: atualizado };
         } catch (error) {
             throw new Error(`Erro ao atualizar usuário: ${error.message}`);

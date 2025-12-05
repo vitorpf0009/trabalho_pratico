@@ -15,13 +15,12 @@ const env = process.env.NODE_ENV || 'development';
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001', 
-    /\.vercel\.app$/,
-    '*' 
+    /\.vercel\.app$/
 ];
 
 // 2. Configure o CORS (temporariamente permissivo para debug)
 app.use(cors({
-    origin: true,
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
@@ -38,7 +37,7 @@ app.use((req, res, next) => {
 // 2. MIDDLEWARES PRINCIPAIS (APÓS O CORS)
 app.use(express.json()); // Habilita o parsing de JSON no corpo da requisição
 
-// ROTA PÚBLICA (SEM AUTENTICAÇÃO)
+// ROTA PÚBLICA APENAS PARA CRIAÇÃO DE USUÁRIOS
 app.use('/api/usuarios', usuarioRoutes);
 
 // 3. ROTAS DA API (PROTEGIDAS)
