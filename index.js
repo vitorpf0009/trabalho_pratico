@@ -20,12 +20,20 @@ const allowedOrigins = [
 
 // 2. Configure o CORS (temporariamente permissivo para debug)
 app.use(cors({
-    origin: allowedOrigins,
+    origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
 
 // --- FIM DA CORREÇÃO ---
+
+// Headers CORS adicionais
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    next();
+});
 
 // Log para debug
 app.use((req, res, next) => {
