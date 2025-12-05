@@ -11,6 +11,9 @@ const rotasUsuario = require('./rotasUsuario');
 const {login, verificaJWT} = require('../controllers/segurancaController');
 
 router.post('/login', login);
+router.get('/perfil', verificaJWT, (req, res) => {
+    res.json({ status: 'success', data: req.usuario });
+});
 
 // Rotas protegidas por autenticação
 router.use('/avioes', verificaJWT, rotasAviao);
